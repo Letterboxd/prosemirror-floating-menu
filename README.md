@@ -8,7 +8,7 @@ rather than using a menu bar for your whole editor.
 This module uses [`prosemirror-menu`](https://github.com/ProseMirror/prosemirror-menu) types and rendering to display the menu so you can repurpose
 `MenuElement`s from a regular menu, including all of their rendering.
 
-![Example image](etc/example.png)
+![Example image](https://github.com/Letterboxd/prosemirror-selection-menu/raw/main/etc/example.png)
 
 ## Example
 
