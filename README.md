@@ -55,6 +55,77 @@ const state = EditorState.create({
 })
 ```
 
+## Example using [`@floating-ui`](https://floating-ui.com/)
+
+Combine this example with the configuration above to use [`@floating-ui`](https://floating-ui.com/) to position the floating menu smartly.
+
+```typescript
+import { autoUpdate, computePosition, flip, offset, shift, VirtualElement } from '@floating-ui/dom'
+
+let selectionMenuAutoUpdateCleanup: (() => void) | undefined
+plugins.push(selectionMenu({
+	content: [styleMenuItems],
+	show: function(view, dom) {
+		const el: VirtualElement = {
+			getBoundingClientRect: function() {
+				const selection = view.state.selection
+
+				const left = view.coordsAtPos(selection.head)
+				const right = left
+
+				return {
+					x: left.left,
+					y: left.top,
+					width: right.right - left.left,
+					height: right.bottom - right.top,
+					left: left.left,
+					right: right.right,
+					top: left.top,
+					bottom: right.bottom,
+				}
+			},
+		}
+
+		if (selectionMenuAutoUpdateCleanup) {
+			selectionMenuAutoUpdateCleanup()
+		}
+
+		dom.style.display = ''
+
+		selectionMenuAutoUpdateCleanup = autoUpdate(el, dom, () => {
+			computePosition(el, dom, {
+				placement: 'top',
+				middleware: [
+					offset(3),
+					flip({
+						crossAxis: false,
+						padding: {
+							top: 40,
+						},
+					}),
+					shift({
+						padding: {
+							top: 3,
+							bottom: 3,
+							left: 3,
+							right: 3,
+						},
+					}),
+				],
+			}).then((position) => {
+				dom.style.left = `${position.x}px`
+				dom.style.top = `${position.y}px`
+			})
+		})
+	},
+	onHide() {
+		if (selectionMenuAutoUpdateCleanup) {
+			selectionMenuAutoUpdateCleanup()
+		}
+	},
+}))
+```
+
 ## Development
 
 I have followed the guide on https://www.sensedeep.com/blog/posts/2021/how-to-create-single-source-npm-module.html for setting
