@@ -1,6 +1,6 @@
 {
   "name": "prosemirror-selection-menu",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
@@ -14,7 +14,12 @@
   "scripts": {
     "build": "rm -rf dist/* && tsc -p tsconfig.json && tsc -p tsconfig-cjs.json && cp etc/package-esm.json dist/esm/package.json && cp etc/package-cjs.json dist/cjs/package.json"
   },
-  "keywords": [],
+  "keywords": [
+    "prosemirror",
+    "menu",
+    "medium",
+    "floating"
+  ],
   "author": "",
   "license": "ISC",
   "peerDependencies": {
