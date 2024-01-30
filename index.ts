@@ -33,6 +33,11 @@ export interface Options {
 	 * @returns 
 	 */
 	onHide?: (menu: HTMLElement) => void
+
+	/**
+	 * A debounce time in milliseconds before showing the menu after a selection is made.
+	 * Defaults to 100ms.
+	 */
 	debounce?: number
 }
 
@@ -62,7 +67,10 @@ class SelectionMenuPluginView implements PluginView {
 	private debouncerTimeout?: NodeJS.Timeout
 
 	public constructor(editorView: EditorView, options: Options) {
-		this.options = options
+		this.options = {
+			debounce: 100,
+			...options,
+		}
 
 		this.dom = document.createElement('div')
 		this.dom.classList.add('ProseMirror-selectionmenu')
@@ -70,13 +78,13 @@ class SelectionMenuPluginView implements PluginView {
 		this.dom.style.position = 'absolute'
 		editorView.dom.parentNode!.appendChild(this.dom)
 		
-		if (options.hide) {
-			options.hide(this.dom)
+		if (this.options.hide) {
+			this.options.hide(this.dom)
 		} else {
 			defaultHide(this.dom)
 		}
 
-		const renderedMenu = renderGrouped(editorView, options.content)
+		const renderedMenu = renderGrouped(editorView, this.options.content)
 		this.menuUpdate = renderedMenu.update
 		this.dom.appendChild(renderedMenu.dom)
 	}
